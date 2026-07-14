@@ -27,7 +27,7 @@
                             @if ($invite->active)
                                 <span class="inline-flex items-center rounded-full bg-green-300 px-2.5 py-0.5 text-xs font-medium text-green-800">Aktif</span>
                             @else
-                                <span class="inline-flex items-center rounded-full bg-gray-100 px-10 py-5 text-xs font-medium text-gray-600">Nonaktif</span>
+                                <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">Nonaktif</span>
                             @endif
                         </td>
                         <td class="px-4 py-3">

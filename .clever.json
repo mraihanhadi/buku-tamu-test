@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "app_id": "app_0b22eac8-8d3a-4dc7-a559-6817e7ed2d73",
+      "org_id": "user_a09daf71-a3a8-418b-b775-6b887f9618bf",
+      "deploy_url": "https://push-n3-par-clevercloud-customers.services.clever-cloud.com/app_0b22eac8-8d3a-4dc7-a559-6817e7ed2d73.git",
+      "git_ssh_url": "git+ssh://git@push-n3-par-clevercloud-customers.services.clever-cloud.com/app_0b22eac8-8d3a-4dc7-a559-6817e7ed2d73.git",
+      "name": "Test-BukuTamu",
+      "alias": "Test-BukuTamu"
+    }
+  ]
+}

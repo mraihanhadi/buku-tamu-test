@@ -5,6 +5,9 @@
 
     <div class="bg-white shadow rounded-lg p-8 max-w-md mx-auto text-center">
         <h1 class="text-xl font-semibold text-gray-900 mb-1">Scan untuk mengisi buku tamu</h1>
+        @if ($invite->place)
+            <p class="text-sm text-gray-600 mb-1">Lokasi: <span class="font-medium text-gray-900">{{ $invite->place }}</span></p>
+        @endif
         <p class="text-sm mb-6">
             @if ($invite->active)
                 <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">Aktif</span>

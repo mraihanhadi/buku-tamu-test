@@ -12,8 +12,9 @@
             <thead class="bg-gray-50 text-center text-gray-500">
                 <tr>
                     <th class="px-4 py-3 font-medium w-32">NIP</th>
-                    <th class="px-4 py-3 font-medium w-1/4">Nama</th>
+                    <th class="px-4 py-3 font-medium w-1/5">Nama</th>
                     <th class="px-4 py-3 font-medium">Keperluan</th>
+                    <th class="px-4 py-3 font-medium w-28">Lokasi</th>
                     <th class="px-4 py-3 font-medium w-32">Tanggal</th>
                     <th class="px-4 py-3 font-medium w-24">Aksi</th>
                 </tr>
@@ -24,6 +25,7 @@
                         <td class="px-4 py-3 text-gray-700 break-words">{{ $guest->employee_id }}</td>
                         <td class="px-4 py-3 text-gray-900 font-medium break-words">{{ $guest->name }}</td>
                         <td class="px-4 py-3 text-gray-700 break-words">{{ $guest->reason }}</td>
+                        <td class="px-4 py-3 text-gray-700 break-words">{{ $guest->place ?? '—' }}</td>
                         <td class="px-4 py-3 text-gray-500 whitespace-nowrap">{{ $guest->created_at->format('d M Y H:i') }}</td>
                         <td class="px-4 py-3">
                             <div class="flex items-center justify-center gap-3">
@@ -39,7 +41,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="px-4 py-8 text-center text-gray-500">Belum ada tamu.</td>
+                        <td colspan="6" class="px-4 py-8 text-center text-gray-500">Belum ada tamu.</td>
                     </tr>
                 @endforelse
             </tbody>

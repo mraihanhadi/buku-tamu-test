@@ -22,11 +22,12 @@ class GuestInviteTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post(route('invites.store'));
+        $response = $this->actingAs($user)->post(route('invites.store'), ['place' => 'Place A']);
 
         $invite = GuestInvite::sole();
         $response->assertRedirect(route('invites.show', $invite));
         $this->assertSame($user->id, $invite->created_by);
+        $this->assertSame('Place A', $invite->place);
 
         // The show page embeds an inline SVG QR code.
         $this->actingAs($user)->get(route('invites.show', $invite))
@@ -35,9 +36,24 @@ class GuestInviteTest extends TestCase
             ->assertSee(route('public.guests.create', $invite));
     }
 
+    public function test_minting_an_invite_requires_a_valid_place(): void
+    {
+        $user = User::factory()->create();
+
+        // No place selected is rejected.
+        $this->actingAs($user)->post(route('invites.store'))
+            ->assertSessionHasErrors('place');
+
+        // A place outside the fixed list is rejected too.
+        $this->actingAs($user)->post(route('invites.store'), ['place' => 'Nowhere'])
+            ->assertSessionHasErrors('place');
+
+        $this->assertSame(0, GuestInvite::count());
+    }
+
     public function test_guest_can_submit_through_a_valid_invite(): void
     {
-        $invite = GuestInvite::mint();
+        $invite = GuestInvite::mint('Place B');
 
         // A freshly minted invite is permanent (never expires) and active.
         $this->assertTrue($invite->active);
@@ -50,7 +66,8 @@ class GuestInviteTest extends TestCase
             ->assertOk()
             ->assertSee('Terima kasih');
 
-        $this->assertDatabaseHas('guests', ['employee_id' => 'EMP-001', 'name' => 'Jane Doe']);
+        // The entry records the place the scanned invite was minted for.
+        $this->assertDatabaseHas('guests', ['employee_id' => 'EMP-001', 'name' => 'Jane Doe', 'place' => 'Place B']);
     }
 
     public function test_staff_can_download_the_qr_as_svg(): void

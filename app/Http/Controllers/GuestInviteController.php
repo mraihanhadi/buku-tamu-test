@@ -28,7 +28,12 @@ class GuestInviteController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $invite = GuestInvite::mint($request->user()->id);
+        // Staff must pick which place the QR is for before it can be minted.
+        $data = $request->validate([
+            'place' => ['required', 'string', 'in:'.implode(',', GuestInvite::PLACES)],
+        ]);
+
+        $invite = GuestInvite::mint($data['place'], $request->user()->id);
 
         return redirect()->route('invites.show', $invite);
     }

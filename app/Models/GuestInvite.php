@@ -7,9 +7,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-#[Fillable(['token', 'active', 'created_by', 'expires_at', 'used_at', 'revoked_at'])]
+#[Fillable(['token', 'active', 'place', 'created_by', 'expires_at', 'used_at', 'revoked_at'])]
 class GuestInvite extends Model
 {
+    /**
+     * The fixed set of places a QR invite can be minted for. Staff must pick
+     * one of these when generating a link.
+     */
+    public const PLACES = ['Place A', 'Place B', 'Place C'];
+
     protected function casts(): array
     {
         return [
@@ -33,11 +39,12 @@ class GuestInvite extends Model
      * printed from it stays valid indefinitely — it is gated by `active`,
      * not by expiry, and is reusable by any number of guests.
      */
-    public static function mint(?int $userId = null): self
+    public static function mint(?string $place = null, ?int $userId = null): self
     {
         return static::create([
             'token' => Str::random(48),
             'active' => true,
+            'place' => $place,
             'created_by' => $userId,
         ]);
     }

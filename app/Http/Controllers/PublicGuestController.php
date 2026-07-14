@@ -52,6 +52,10 @@ class PublicGuestController extends Controller
             'reason' => ['required', 'string', 'max:1000'],
         ]);
 
+        // Tag the entry with the place this invite was minted for, so staff
+        // can see which location each visitor came to.
+        $data['place'] = $invite->place;
+
         // The invite is permanent and reusable, so it is not burned here — any
         // number of guests may submit while it stays active. The rate limiter
         // above is what blunts abuse of the public link.

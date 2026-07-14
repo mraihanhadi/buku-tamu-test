@@ -9,7 +9,12 @@
 <body class="h-full bg-gray-100 flex items-center justify-center p-4">
     <div class="w-full max-w-sm">
         <div class="bg-white shadow rounded-lg p-8">
-            <h1 class="text-2xl font-semibold text-gray-900 text-center mb-6">Buku Tamu</h1>
+            <h1 class="text-2xl font-semibold text-gray-900 text-center mb-1">Buku Tamu</h1>
+            @if ($invite->place)
+                <p class="text-center text-sm text-gray-600 mb-6">Lokasi: <span class="font-medium text-gray-900">{{ $invite->place }}</span></p>
+            @else
+                <div class="mb-6"></div>
+            @endif
 
             @if ($errors->any())
                 <div class="mb-4 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">

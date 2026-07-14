@@ -1,20 +1,31 @@
 <x-layouts.app title="Link Undangan">
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-between mb-6 gap-4">
         <h1 class="text-xl font-semibold text-gray-900">Link Undangan QR</h1>
-        <form method="POST" action="{{ route('invites.store') }}">
+        <form method="POST" action="{{ route('invites.store') }}" class="flex items-center gap-2">
             @csrf
+            <select name="place" required
+                    class="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                <option value="" disabled {{ old('place') ? '' : 'selected' }}>Pilih lokasi…</option>
+                @foreach (\App\Models\GuestInvite::PLACES as $place)
+                    <option value="{{ $place }}" {{ old('place') === $place ? 'selected' : '' }}>{{ $place }}</option>
+                @endforeach
+            </select>
             <button type="submit"
-                    class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 cursor-pointer">
+                    class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 cursor-pointer whitespace-nowrap">
                 + Buat link baru
             </button>
         </form>
     </div>
 
+    @error('place')
+        <div class="mb-4 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">{{ $message }}</div>
+    @enderror
+
     <div class="bg-white shadow rounded-lg overflow-hidden">
         <table class="w-full table-fixed divide-y divide-gray-200 text-sm">
             <thead class="bg-gray-50 text-center text-gray-500">
                 <tr>
-                    <th class="px-4 py-3 font-medium">Token</th>
+                    <th class="px-4 py-3 font-medium">Lokasi</th>
                     <th class="px-4 py-3 font-medium w-32">Status</th>
                     <th class="px-4 py-3 font-medium w-56">Aksi</th>
                 </tr>
@@ -22,7 +33,7 @@
             <tbody class="divide-y divide-gray-100 text-center">
                 @forelse ($invites as $invite)
                     <tr>
-                        <td class="px-4 py-3 text-gray-700 font-mono truncate">{{ Str::limit($invite->token, 16) }}</td>
+                        <td class="px-4 py-3 text-gray-700 font-medium truncate">{{ $invite->place ?? '—' }}</td>
                         <td class="px-4 py-3 whitespace-nowrap">
                             @if ($invite->active)
                                 <span class="inline-flex items-center rounded-full bg-green-300 px-2.5 py-0.5 text-xs font-medium text-green-800">Aktif</span>

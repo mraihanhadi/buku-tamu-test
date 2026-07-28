@@ -31,9 +31,10 @@ Three access tiers, wired in `routes/web.php`:
 - Usability is gated by two independent flags: `active` (a reversible on/off toggle via `activate()`/`deactivate()`) and `revoked_at` (a permanent one-way kill). `isUsable()` / `scopeUsable()` require `active === true` AND `revoked_at === null`.
 - The legacy `expires_at`/`used_at` columns still exist but are **no longer used as gates** — don't reintroduce expiry/single-use logic without a deliberate design change.
 
-**QR rendering** goes through `App\Support\QrCode` (bacon/bacon-qr-code):
-- `svg()` returns an inline `HtmlString` embedded in Blade via `{!! ... !!}` — the SVG backend needs no `gd`/`imagick`.
-- `png()` uses the **Imagick** backend, so it requires the `imagick` extension. The invite download route serves SVG by default and PNG on `?format=png`; keep the PNG path optional so environments without `imagick` still work.
+**QR rendering** goes through `App\Support\QrCode` (endroid/qr-code v6, via its `Builder`):
+- `svg()` returns an inline `HtmlString` embedded in Blade via `{!! ... !!}` — the SVG writer needs no image extension, and the XML declaration is excluded so the markup nests inside a page.
+- `png()` uses endroid's **GD**-backed `PngWriter`, so it requires the `gd` extension. The invite download route serves SVG by default and PNG on `?format=png`; keep the PNG path optional so environments without `gd` still work.
+- Both take a `$size` that is the **final rendered dimension**: the class subtracts its quiet-zone margin from the QR area so the output is exactly `$size` x `$size`.
 
 **Rate limiting** guards abuse-prone writes via the `RateLimiter` facade (not middleware): public submissions are keyed per `token + IP` (`PublicGuestController`), and staff entry creation per `user id` (`GuestController`). Exceeding the limit throws a `ValidationException` surfaced on the form.
 

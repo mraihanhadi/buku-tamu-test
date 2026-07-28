@@ -21,7 +21,6 @@ class GuestRateLimitTest extends TestCase
             'reason' => 'Meeting',
         ];
 
-        // First 5 attempts should succeed.
         for ($i = 0; $i < 5; $i++) {
             $this->actingAs($user)
                 ->post(route('guests.store'), $payload)
